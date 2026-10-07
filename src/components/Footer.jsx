@@ -9,9 +9,9 @@ export default function Footer() {
 
   return (
     <footer className="bg-gray-900 text-gray-300 mt-20">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 grid grid-cols-1 sm:grid-cols-3 gap-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Brand */}
-        <div>
+        <div className="sm:col-span-2 lg:col-span-1">
           <div className="flex items-center gap-2.5 mb-3">
             <div className="w-9 h-9 bg-brand-500 rounded-xl flex items-center justify-center text-white">
               <Tag size={18} />
@@ -26,6 +26,7 @@ export default function Footer() {
               href={SITE_CONFIG.socialMedia.facebook}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Facebook Marketplace"
               className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
             >
               <Facebook size={17} />
@@ -34,6 +35,7 @@ export default function Footer() {
               href={SITE_CONFIG.socialMedia.tiktok}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="TikTok"
               className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
             >
               <Music2 size={17} />
@@ -42,6 +44,7 @@ export default function Footer() {
               href={`https://wa.me/${(settings.whatsapp || SITE_CONFIG.whatsappNumber).replace(/\D/g,'')}`}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="WhatsApp"
               className="w-9 h-9 rounded-full bg-[#25D366]/20 flex items-center justify-center hover:bg-[#25D366]/30 transition-colors text-[#25D366]"
             >
               <MessageCircle size={17} />
@@ -49,11 +52,15 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Links */}
+        {/* Navegación */}
         <div>
           <h4 className="text-white font-semibold text-sm mb-4">Navegación</h4>
           <ul className="space-y-2.5 text-sm">
-            {[['/', 'Inicio'], ['/catalogo', 'Catálogo'], ['/envios', 'Info de Envíos']].map(([to, label]) => (
+            {[
+              ['/', 'Inicio'],
+              ['/catalogo', 'Catálogo'],
+              ['/envios', 'Info de Envíos'],
+            ].map(([to, label]) => (
               <li key={to}>
                 <Link to={to} className="text-gray-400 hover:text-white transition-colors">{label}</Link>
               </li>
@@ -61,21 +68,44 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Delivery summary */}
+        {/* Entregas */}
         <div>
           <h4 className="text-white font-semibold text-sm mb-4">Entregas</h4>
-          <ul className="space-y-2.5 text-sm text-gray-400">
+          <ul className="space-y-2 text-sm text-gray-400">
             <li>📍 <strong className="text-gray-200">Maracay</strong> — Lun a Vie</li>
             <li>🏙️ <strong className="text-gray-200">Caracas</strong> — Lun a Vie</li>
             <li>🗺️ <strong className="text-gray-200">Valencia</strong> — Sáb y Dom</li>
-            <li>📦 <strong className="text-gray-200">Nacional</strong> — MRW / Zoom (cobro a destino)</li>
+            <li>📦 <strong className="text-gray-200">Nacional</strong> — MRW / Zoom</li>
+          </ul>
+        </div>
+
+        {/* Legal */}
+        <div>
+          <h4 className="text-white font-semibold text-sm mb-4">Legal</h4>
+          <ul className="space-y-2.5 text-sm">
+            {[
+              ['/legal/aviso',      'Aviso Legal'],
+              ['/legal/privacidad', 'Política de Privacidad'],
+              ['/legal/cookies',    'Política de Cookies'],
+              ['/legal/terminos',   'Términos y Condiciones'],
+            ].map(([to, label]) => (
+              <li key={to}>
+                <Link to={to} className="text-gray-400 hover:text-white transition-colors">{label}</Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
-      <div className="border-t border-white/10 text-center text-xs text-gray-500 py-4 px-4">
-        © {year} Venta de Garaje · Hecho con ❤️ en Venezuela
-        <span className="mx-3">·</span>
-        <Link to="/admin" className="hover:text-gray-300 transition-colors">Admin</Link>
+
+      <div className="border-t border-white/10 px-4 py-4">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+          <span>© {year} Venta de Garaje · Hecho con ❤️ en Venezuela</span>
+          <div className="flex items-center gap-4">
+            <Link to="/legal/privacidad" className="hover:text-gray-300 transition-colors">Privacidad</Link>
+            <Link to="/legal/cookies" className="hover:text-gray-300 transition-colors">Cookies</Link>
+            <Link to="/admin" className="hover:text-gray-300 transition-colors">Admin</Link>
+          </div>
+        </div>
       </div>
     </footer>
   )
