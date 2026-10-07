@@ -7,7 +7,7 @@ import { SITE_CONFIG } from '../config'
 
 function buildWhatsappLink(phone, product) {
   const msg = encodeURIComponent(
-    `Hola! 👋 Me interesa *${product.title}* que vi en tu venta de garaje. ¿Sigue disponible?`
+    `Hola! Me interesa *${product.title}* que vi en tu venta de garaje. Sigue disponible?`
   )
   return `https://wa.me/${phone.replace(/\D/g, '')}?text=${msg}`
 }
