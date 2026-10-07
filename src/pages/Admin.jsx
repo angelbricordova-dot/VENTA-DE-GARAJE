@@ -55,9 +55,6 @@ function AdminLogin({ onLogin }) {
             Entrar al panel
           </button>
         </form>
-        <p className="text-center text-xs text-gray-400 mt-4">
-          Contraseña por defecto: <code className="bg-gray-100 px-1.5 py-0.5 rounded">{DEFAULT_ADMIN_PASSWORD}</code>
-        </p>
       </div>
       <style>{`
         @keyframes shake {
