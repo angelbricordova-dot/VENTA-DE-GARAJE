@@ -17,8 +17,10 @@ export default function Catalog() {
   const [statusFilter, setStatusFilter] = useState('all')
   const [categoryFilter, setCategoryFilter] = useState('all')
 
+  const publicProducts = useMemo(() => products.filter(p => p.status !== 'draft'), [products])
+
   const filtered = useMemo(() => {
-    return products
+    return publicProducts
       .filter(p => statusFilter === 'all' || p.status === statusFilter)
       .filter(p => categoryFilter === 'all' || p.category === categoryFilter)
       .filter(p => {
@@ -30,26 +32,26 @@ export default function Catalog() {
           (p.category || '').toLowerCase().includes(q)
         )
       })
-  }, [products, statusFilter, categoryFilter, search])
+  }, [publicProducts, statusFilter, categoryFilter, search])
 
   const usedCategories = useMemo(() => {
-    const cats = [...new Set(products.map(p => p.category).filter(Boolean))]
+    const cats = [...new Set(publicProducts.map(p => p.category).filter(Boolean))]
     return cats.sort()
-  }, [products])
+  }, [publicProducts])
 
   const countByStatus = useMemo(() => ({
-    all:       products.length,
-    available: products.filter(p => p.status === 'available').length,
-    pending:   products.filter(p => p.status === 'pending').length,
-    sold:      products.filter(p => p.status === 'sold').length,
-  }), [products])
+    all:       publicProducts.length,
+    available: publicProducts.filter(p => p.status === 'available').length,
+    pending:   publicProducts.filter(p => p.status === 'pending').length,
+    sold:      publicProducts.filter(p => p.status === 'sold').length,
+  }), [publicProducts])
 
   return (
     <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       {/* Page header */}
       <div className="mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Catálogo completo</h1>
-        <p className="text-gray-500 mt-1">{products.length} artículos en total · {countByStatus.available} disponibles ahora</p>
+        <p className="text-gray-500 mt-1">{publicProducts.length} artículos en total · {countByStatus.available} disponibles ahora</p>
       </div>
 
       {/* Search */}

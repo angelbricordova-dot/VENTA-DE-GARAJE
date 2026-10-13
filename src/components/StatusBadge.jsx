@@ -6,12 +6,14 @@ export default function StatusBadge({ status, size = 'sm' }) {
     available: 'badge-available',
     pending: 'badge-pending',
     sold: 'badge-sold',
+    draft: 'badge-draft',
   }[cfg.color] || 'badge-available'
 
   const dot = {
     available: 'bg-emerald-500',
     pending: 'bg-amber-500',
     sold: 'bg-red-500',
+    draft: 'bg-gray-400',
   }[cfg.color]
 
   return (

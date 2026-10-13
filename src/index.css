@@ -36,6 +36,9 @@
   .badge-sold {
     @apply inline-flex items-center gap-1 px-2.5 py-1 bg-red-50 text-red-600 text-xs font-semibold rounded-full;
   }
+  .badge-draft {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 text-gray-500 text-xs font-semibold rounded-full;
+  }
   .input {
     @apply w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition-all placeholder-gray-400;
   }

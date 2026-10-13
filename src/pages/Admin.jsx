@@ -106,6 +106,13 @@ function ProductForm({ initial = emptyForm, onSave, onCancel, title }) {
   const [uploadError, setUploadError] = useState('')
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
+  const buildPayload = (overrides = {}) => ({
+    ...form,
+    ...overrides,
+    price: Number(form.price) || 0,
+    originalPrice: form.originalPrice ? Number(form.originalPrice) : null,
+  })
+
   const handleFile = async (file) => {
     if (!file) return
     if (!file.type.startsWith('image/')) { setUploadError('Solo se aceptan imágenes'); return }
@@ -130,7 +137,12 @@ function ProductForm({ initial = emptyForm, onSave, onCancel, title }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!form.title.trim() || !form.price) return
-    onSave({ ...form, price: Number(form.price), originalPrice: form.originalPrice ? Number(form.originalPrice) : null })
+    onSave(buildPayload())
+  }
+
+  const handleSaveDraft = () => {
+    if (!form.title.trim()) return
+    onSave(buildPayload({ status: 'draft' }))
   }
 
   return (
@@ -286,12 +298,21 @@ function ProductForm({ initial = emptyForm, onSave, onCancel, title }) {
             </div>
           </div>
           {/* Buttons */}
-          <div className="sm:col-span-2 flex gap-3 pt-2">
-            <button type="submit" className="btn-primary flex-1 py-3.5">
-              <Save size={16} /> Guardar artículo
-            </button>
-            <button type="button" onClick={onCancel} className="btn-secondary">
-              Cancelar
+          <div className="sm:col-span-2 flex flex-col gap-3 pt-2">
+            <div className="flex gap-3">
+              <button type="submit" className="btn-primary flex-1 py-3.5">
+                <Save size={16} /> {form.status === 'draft' ? 'Publicar artículo' : 'Guardar artículo'}
+              </button>
+              <button type="button" onClick={onCancel} className="btn-secondary">
+                Cancelar
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={handleSaveDraft}
+              className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-gray-200 text-gray-500 text-sm font-medium hover:bg-gray-50 hover:border-gray-300 transition-colors w-full"
+            >
+              <span className="text-base">📝</span> Guardar como borrador
             </button>
           </div>
         </form>
@@ -406,6 +427,7 @@ export default function Admin() {
     available: products.filter(p => p.status === 'available').length,
     pending:   products.filter(p => p.status === 'pending').length,
     sold:      products.filter(p => p.status === 'sold').length,
+    draft:     products.filter(p => p.status === 'draft').length,
   }
 
   const handleSaveNew = (data) => { addProduct(data); setShowForm(false) }
@@ -438,12 +460,13 @@ export default function Admin() {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-8">
           {[
             { label: 'Total artículos', value: counts.all, icon: <Package size={20} />, color: 'bg-gray-100 text-gray-700' },
             { label: 'Disponibles', value: counts.available, icon: <CheckCircle size={20} />, color: 'bg-emerald-50 text-emerald-700' },
             { label: 'Apartados', value: counts.pending, icon: <Clock size={20} />, color: 'bg-amber-50 text-amber-700' },
             { label: 'Vendidos', value: counts.sold, icon: <Tag size={20} />, color: 'bg-red-50 text-red-700' },
+            { label: 'Borradores', value: counts.draft, icon: <span className="text-lg leading-none">📝</span>, color: 'bg-gray-50 text-gray-500' },
           ].map(s => (
             <div key={s.label} className={`rounded-2xl p-5 ${s.color} flex items-center gap-4`}>
               <div className="opacity-70">{s.icon}</div>
@@ -458,7 +481,7 @@ export default function Admin() {
         {/* Header + Add button */}
         <div className="flex items-center justify-between mb-5">
           <div className="flex gap-2 flex-wrap">
-            {['all', 'available', 'pending', 'sold'].map(s => (
+            {['all', 'available', 'pending', 'sold', 'draft'].map(s => (
               <button
                 key={s}
                 onClick={() => setStatusFilter(s)}

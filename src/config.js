@@ -71,4 +71,5 @@ export const STATUS_LABELS = {
   available: { label: 'Disponible', color: 'available' },
   pending:   { label: 'Apartado',   color: 'pending'   },
   sold:      { label: 'Vendido',    color: 'sold'      },
+  draft:     { label: 'Borrador',   color: 'draft'     },
 }

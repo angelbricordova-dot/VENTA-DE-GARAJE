@@ -10,9 +10,10 @@ export default function Home() {
   const { products } = useProducts()
   const { settings } = useSettings()
 
-  const available = products.filter(p => p.status === 'available')
-  const featured = products.filter(p => p.status !== 'sold').slice(0, 6)
-  const soldCount = products.filter(p => p.status === 'sold').length
+  const publicProducts = products.filter(p => p.status !== 'draft')
+  const available = publicProducts.filter(p => p.status === 'available')
+  const featured = publicProducts.filter(p => p.status !== 'sold').slice(0, 6)
+  const soldCount = publicProducts.filter(p => p.status === 'sold').length
 
   return (
     <main>
