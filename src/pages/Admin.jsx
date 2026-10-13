@@ -69,6 +69,30 @@ function AdminLogin({ onLogin }) {
   )
 }
 
+// ─── Image Upload Helper ──────────────────────────────────────────────────────
+function compressImage(file, maxPx = 800, quality = 0.75) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = ev => {
+      const img = new Image()
+      img.onload = () => {
+        const scale = Math.min(1, maxPx / Math.max(img.width, img.height))
+        const w = Math.round(img.width * scale)
+        const h = Math.round(img.height * scale)
+        const canvas = document.createElement('canvas')
+        canvas.width = w
+        canvas.height = h
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h)
+        resolve(canvas.toDataURL('image/jpeg', quality))
+      }
+      img.onerror = reject
+      img.src = ev.target.result
+    }
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
+}
+
 // ─── Product Form ─────────────────────────────────────────────────────────────
 const emptyForm = {
   title: '', description: '', price: '', originalPrice: '', currency: 'USD',
@@ -77,7 +101,31 @@ const emptyForm = {
 
 function ProductForm({ initial = emptyForm, onSave, onCancel, title }) {
   const [form, setForm] = useState(initial)
+  const [imgTab, setImgTab] = useState(initial.imageUrl?.startsWith('data:') ? 'upload' : 'url')
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState('')
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
+
+  const handleFile = async (file) => {
+    if (!file) return
+    if (!file.type.startsWith('image/')) { setUploadError('Solo se aceptan imágenes'); return }
+    setUploading(true)
+    setUploadError('')
+    try {
+      const dataUrl = await compressImage(file)
+      set('imageUrl', dataUrl)
+    } catch {
+      setUploadError('No se pudo procesar la imagen')
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    const file = e.dataTransfer.files?.[0]
+    if (file) handleFile(file)
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -108,18 +156,84 @@ function ProductForm({ initial = emptyForm, onSave, onCancel, title }) {
               placeholder="Describe el estado, lo que incluye, tamaño, color..."
             />
           </div>
-          {/* Image URL */}
+          {/* Image — tabs: upload / url */}
           <div className="sm:col-span-2">
-            <label className="label">URL de la imagen</label>
-            <input className="input" value={form.imageUrl} onChange={e => set('imageUrl', e.target.value)} placeholder="https://..." />
-            <p className="text-xs text-gray-400 mt-1">Pega el enlace de cualquier imagen online (Google Drive, Imgur, Unsplash, etc.)</p>
-          </div>
-          {/* Preview image */}
-          {form.imageUrl && (
-            <div className="sm:col-span-2">
-              <img src={form.imageUrl} alt="Preview" className="w-24 h-24 rounded-xl object-cover border" onError={e => e.target.style.display='none'} />
+            <label className="label">Imagen del artículo</label>
+            <div className="flex gap-1 mb-3 bg-gray-100 rounded-xl p-1 w-fit">
+              <button
+                type="button"
+                onClick={() => setImgTab('upload')}
+                className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${imgTab === 'upload' ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                Subir foto
+              </button>
+              <button
+                type="button"
+                onClick={() => setImgTab('url')}
+                className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${imgTab === 'url' ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                Pegar URL
+              </button>
             </div>
-          )}
+
+            {imgTab === 'upload' ? (
+              <div>
+                <label
+                  className="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-200 rounded-2xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-all bg-gray-50 relative"
+                  onDrop={handleDrop}
+                  onDragOver={e => e.preventDefault()}
+                >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    onChange={e => handleFile(e.target.files?.[0])}
+                  />
+                  {uploading ? (
+                    <div className="flex flex-col items-center gap-2 text-brand-500">
+                      <div className="w-6 h-6 border-2 border-brand-400 border-t-transparent rounded-full animate-spin" />
+                      <span className="text-xs font-medium">Comprimiendo...</span>
+                    </div>
+                  ) : form.imageUrl && imgTab === 'upload' ? (
+                    <div className="flex flex-col items-center gap-2">
+                      <img src={form.imageUrl} alt="Preview" className="h-24 rounded-xl object-cover shadow" />
+                      <span className="text-xs text-gray-400">Toca para cambiar</span>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center gap-2 text-gray-400">
+                      <Upload size={28} className="text-gray-300" />
+                      <span className="text-sm font-medium text-gray-500">Toca para elegir foto</span>
+                      <span className="text-xs">o arrastra aquí · JPG, PNG, WEBP</span>
+                    </div>
+                  )}
+                </label>
+                {uploadError && <p className="text-xs text-red-500 mt-1.5">{uploadError}</p>}
+                {form.imageUrl?.startsWith('data:') && (
+                  <button
+                    type="button"
+                    onClick={() => set('imageUrl', '')}
+                    className="text-xs text-red-400 hover:text-red-600 mt-1.5 flex items-center gap-1"
+                  >
+                    <X size={12} /> Quitar imagen
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div>
+                <input
+                  className="input"
+                  value={form.imageUrl?.startsWith('data:') ? '' : form.imageUrl}
+                  onChange={e => set('imageUrl', e.target.value)}
+                  placeholder="https://..."
+                />
+                <p className="text-xs text-gray-400 mt-1">Pega el enlace de cualquier imagen online (Imgur, Google Drive, etc.)</p>
+                {form.imageUrl && !form.imageUrl.startsWith('data:') && (
+                  <img src={form.imageUrl} alt="Preview" className="w-24 h-24 rounded-xl object-cover border mt-2" onError={e => e.target.style.display='none'} />
+                )}
+              </div>
+            )}
+          </div>
           {/* Price */}
           <div>
             <label className="label">Precio *</label>
