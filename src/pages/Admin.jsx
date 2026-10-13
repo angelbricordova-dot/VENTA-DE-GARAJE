@@ -96,15 +96,48 @@ function compressImage(file, maxPx = 800, quality = 0.75) {
 // ─── Product Form ─────────────────────────────────────────────────────────────
 const emptyForm = {
   title: '', description: '', price: '', originalPrice: '', currency: 'USD',
-  status: 'available', imageUrl: '', category: '', condition: 'Buen estado',
+  status: 'available', imageUrl: '', images: [], category: '', condition: 'Buen estado',
 }
 
 function ProductForm({ initial = emptyForm, onSave, onCancel, title }) {
-  const [form, setForm] = useState(initial)
-  const [imgTab, setImgTab] = useState(initial.imageUrl?.startsWith('data:') ? 'upload' : 'url')
+  const [form, setForm] = useState(() => {
+    const f = { ...initial }
+    if (!f.images || f.images.length === 0) f.images = f.imageUrl ? [f.imageUrl] : []
+    return f
+  })
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState('')
+  const [urlInput, setUrlInput] = useState('')
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
+
+  const images = form.images || []
+  const setImages = (imgs) => setForm(f => ({ ...f, images: imgs, imageUrl: imgs[0] || '' }))
+  const removeImage = (idx) => setImages(images.filter((_, i) => i !== idx))
+
+  const handleFiles = async (files) => {
+    if (!files?.length) return
+    const remaining = 8 - images.length
+    if (remaining <= 0) return
+    setUploading(true)
+    setUploadError('')
+    try {
+      const toProcess = Array.from(files).slice(0, remaining).filter(f => f.type.startsWith('image/'))
+      if (!toProcess.length) { setUploadError('Solo se aceptan imágenes'); setUploading(false); return }
+      const compressed = await Promise.all(toProcess.map(f => compressImage(f)))
+      setImages([...images, ...compressed])
+    } catch {
+      setUploadError('Error al procesar alguna imagen')
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const addByUrl = () => {
+    const url = urlInput.trim()
+    if (!url || images.length >= 8) return
+    setImages([...images, url])
+    setUrlInput('')
+  }
 
   const buildPayload = (overrides = {}) => ({
     ...form,
@@ -112,27 +145,6 @@ function ProductForm({ initial = emptyForm, onSave, onCancel, title }) {
     price: Number(form.price) || 0,
     originalPrice: form.originalPrice ? Number(form.originalPrice) : null,
   })
-
-  const handleFile = async (file) => {
-    if (!file) return
-    if (!file.type.startsWith('image/')) { setUploadError('Solo se aceptan imágenes'); return }
-    setUploading(true)
-    setUploadError('')
-    try {
-      const dataUrl = await compressImage(file)
-      set('imageUrl', dataUrl)
-    } catch {
-      setUploadError('No se pudo procesar la imagen')
-    } finally {
-      setUploading(false)
-    }
-  }
-
-  const handleDrop = (e) => {
-    e.preventDefault()
-    const file = e.dataTransfer.files?.[0]
-    if (file) handleFile(file)
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -168,83 +180,66 @@ function ProductForm({ initial = emptyForm, onSave, onCancel, title }) {
               placeholder="Describe el estado, lo que incluye, tamaño, color..."
             />
           </div>
-          {/* Image — tabs: upload / url */}
+          {/* Images — multi */}
           <div className="sm:col-span-2">
-            <label className="label">Imagen del artículo</label>
-            <div className="flex gap-1 mb-3 bg-gray-100 rounded-xl p-1 w-fit">
-              <button
-                type="button"
-                onClick={() => setImgTab('upload')}
-                className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${imgTab === 'upload' ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
-              >
-                Subir foto
-              </button>
-              <button
-                type="button"
-                onClick={() => setImgTab('url')}
-                className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${imgTab === 'url' ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
-              >
-                Pegar URL
-              </button>
-            </div>
-
-            {imgTab === 'upload' ? (
-              <div>
+            <label className="label">
+              Fotos del artículo
+              <span className="text-gray-400 font-normal ml-1">({images.length}/8)</span>
+            </label>
+            <div className="flex flex-wrap gap-2 mb-3">
+              {images.map((src, idx) => (
+                <div key={idx} className="relative w-20 h-20 shrink-0">
+                  <img src={src} alt="" className="w-full h-full object-cover rounded-xl border border-gray-100" onError={e => e.target.style.opacity='0.3'} />
+                  {idx === 0 && (
+                    <span className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[9px] bg-brand-500 text-white px-1.5 py-0.5 rounded-full whitespace-nowrap leading-tight">Portada</span>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => removeImage(idx)}
+                    className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow transition-colors"
+                  >
+                    <X size={10} />
+                  </button>
+                </div>
+              ))}
+              {images.length < 8 && (
                 <label
-                  className="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-200 rounded-2xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-all bg-gray-50 relative"
-                  onDrop={handleDrop}
+                  className="w-20 h-20 rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-all shrink-0"
+                  onDrop={e => { e.preventDefault(); handleFiles(e.dataTransfer.files) }}
                   onDragOver={e => e.preventDefault()}
                 >
                   <input
                     type="file"
                     accept="image/*"
-                    capture="environment"
-                    className="absolute inset-0 opacity-0 cursor-pointer"
-                    onChange={e => handleFile(e.target.files?.[0])}
+                    multiple
+                    className="hidden"
+                    onChange={e => handleFiles(e.target.files)}
                   />
                   {uploading ? (
-                    <div className="flex flex-col items-center gap-2 text-brand-500">
-                      <div className="w-6 h-6 border-2 border-brand-400 border-t-transparent rounded-full animate-spin" />
-                      <span className="text-xs font-medium">Comprimiendo...</span>
-                    </div>
-                  ) : form.imageUrl && imgTab === 'upload' ? (
-                    <div className="flex flex-col items-center gap-2">
-                      <img src={form.imageUrl} alt="Preview" className="h-24 rounded-xl object-cover shadow" />
-                      <span className="text-xs text-gray-400">Toca para cambiar</span>
-                    </div>
+                    <div className="w-5 h-5 border-2 border-brand-400 border-t-transparent rounded-full animate-spin" />
                   ) : (
-                    <div className="flex flex-col items-center gap-2 text-gray-400">
-                      <Upload size={28} className="text-gray-300" />
-                      <span className="text-sm font-medium text-gray-500">Toca para elegir foto</span>
-                      <span className="text-xs">o arrastra aquí · JPG, PNG, WEBP</span>
-                    </div>
+                    <>
+                      <Upload size={20} className="text-gray-300" />
+                      <span className="text-[10px] text-gray-400 mt-0.5">Foto</span>
+                    </>
                   )}
                 </label>
-                {uploadError && <p className="text-xs text-red-500 mt-1.5">{uploadError}</p>}
-                {form.imageUrl?.startsWith('data:') && (
-                  <button
-                    type="button"
-                    onClick={() => set('imageUrl', '')}
-                    className="text-xs text-red-400 hover:text-red-600 mt-1.5 flex items-center gap-1"
-                  >
-                    <X size={12} /> Quitar imagen
-                  </button>
-                )}
-              </div>
-            ) : (
-              <div>
-                <input
-                  className="input"
-                  value={form.imageUrl?.startsWith('data:') ? '' : form.imageUrl}
-                  onChange={e => set('imageUrl', e.target.value)}
-                  placeholder="https://..."
-                />
-                <p className="text-xs text-gray-400 mt-1">Pega el enlace de cualquier imagen online (Imgur, Google Drive, etc.)</p>
-                {form.imageUrl && !form.imageUrl.startsWith('data:') && (
-                  <img src={form.imageUrl} alt="Preview" className="w-24 h-24 rounded-xl object-cover border mt-2" onError={e => e.target.style.display='none'} />
-                )}
-              </div>
-            )}
+              )}
+            </div>
+            {uploadError && <p className="text-xs text-red-500 mb-2">{uploadError}</p>}
+            <div className="flex gap-2">
+              <input
+                className="input text-sm flex-1"
+                value={urlInput}
+                onChange={e => setUrlInput(e.target.value)}
+                placeholder="O añade por URL: https://..."
+                onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addByUrl() } }}
+              />
+              <button type="button" onClick={addByUrl} disabled={!urlInput.trim() || images.length >= 8} className="btn-secondary px-3 py-2 text-xs disabled:opacity-40">
+                Añadir
+              </button>
+            </div>
+            <p className="text-xs text-gray-400 mt-1.5">La primera foto es la portada · puedes seleccionar varias a la vez</p>
           </div>
           {/* Price */}
           <div>
@@ -281,7 +276,7 @@ function ProductForm({ initial = emptyForm, onSave, onCancel, title }) {
           <div className="sm:col-span-2">
             <label className="label">Estado de venta</label>
             <div className="flex gap-3 flex-wrap">
-              {Object.entries(STATUS_LABELS).map(([key, cfg]) => (
+              {Object.entries(STATUS_LABELS).filter(([k]) => k !== 'draft').map(([key, cfg]) => (
                 <button
                   key={key}
                   type="button"

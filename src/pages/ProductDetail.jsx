@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft, MessageCircle, Share2, Tag, Package, MapPin } from 'lucide-react'
 import StatusBadge from '../components/StatusBadge'
@@ -21,6 +22,8 @@ export default function ProductDetail() {
   const product = products.find(p => p.id === id)
   const phone = settings.whatsapp || SITE_CONFIG.whatsappNumber
   const isSold = product?.status === 'sold'
+  const images = product?.images?.length > 0 ? product.images : product?.imageUrl ? [product.imageUrl] : []
+  const [selectedIdx, setSelectedIdx] = useState(0)
 
   if (!product) {
     return (
@@ -57,27 +60,44 @@ export default function ProductDetail() {
       </button>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-        {/* Image */}
-        <div className="relative rounded-3xl overflow-hidden bg-gray-100 aspect-square">
-          {product.imageUrl ? (
-            <img
-              src={product.imageUrl}
-              alt={product.title}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="product-image-placeholder w-full h-full flex items-center justify-center text-7xl">🏷️</div>
-          )}
-          {isSold && (
-            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-              <span className="bg-red-500 text-white font-black text-2xl px-8 py-3 rounded-2xl rotate-[-12deg] shadow-lg">
-                VENDIDO
-              </span>
-            </div>
-          )}
-          {product.originalPrice && !isSold && (
-            <div className="absolute top-4 right-4 bg-brand-500 text-white text-sm font-bold px-3 py-1.5 rounded-xl shadow">
-              -{Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
+        {/* Image gallery */}
+        <div className="flex flex-col gap-3">
+          <div className="relative rounded-3xl overflow-hidden bg-gray-100 aspect-square">
+            {images.length > 0 ? (
+              <img
+                src={images[selectedIdx]}
+                alt={product.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="product-image-placeholder w-full h-full flex items-center justify-center text-7xl">🏷️</div>
+            )}
+            {isSold && (
+              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                <span className="bg-red-500 text-white font-black text-2xl px-8 py-3 rounded-2xl rotate-[-12deg] shadow-lg">
+                  VENDIDO
+                </span>
+              </div>
+            )}
+            {product.originalPrice && !isSold && (
+              <div className="absolute top-4 right-4 bg-brand-500 text-white text-sm font-bold px-3 py-1.5 rounded-xl shadow">
+                -{Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
+              </div>
+            )}
+          </div>
+          {images.length > 1 && (
+            <div className="flex gap-2 overflow-x-auto pb-1">
+              {images.map((src, i) => (
+                <button
+                  key={i}
+                  onClick={() => setSelectedIdx(i)}
+                  className={`shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${
+                    i === selectedIdx ? 'border-brand-500 opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
+                  }`}
+                >
+                  <img src={src} alt="" className="w-full h-full object-cover" />
+                </button>
+              ))}
             </div>
           )}
         </div>
