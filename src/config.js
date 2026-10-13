@@ -45,6 +45,9 @@ export const PRODUCTS_KEY = 'vg_products'
 export const SETTINGS_KEY = 'vg_settings'
 export const DEFAULT_ADMIN_PASSWORD = 'garaje2024'
 
+export const CLOTHING_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Talla única']
+export const SHOE_SIZES = ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45']
+
 export const CATEGORIES = [
   'Accesorios',
   'Electrónicos',

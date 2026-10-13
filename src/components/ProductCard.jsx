@@ -60,6 +60,11 @@ export default function ProductCard({ product }) {
         {product.category && (
           <span className="text-xs text-gray-400">{product.category} · {product.condition}</span>
         )}
+        {product.size && (
+          <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full w-fit">
+            Talla {product.size}
+          </span>
+        )}
         {product.stock > 0 && product.status === 'available' && (
           <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full w-fit ${
             product.stock === 1

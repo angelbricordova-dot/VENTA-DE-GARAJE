@@ -1,14 +1,18 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Tag, Star, Truck, MessageCircle, Facebook, Music2 } from 'lucide-react'
 import ProductCard from '../components/ProductCard'
+import BundleCard from '../components/BundleCard'
 import DeliveryInfo from '../components/DeliveryInfo'
 import { useProducts } from '../hooks/useProducts'
 import { useSettings } from '../hooks/useAdmin'
+import { useBundles } from '../hooks/useBundles'
 import { SITE_CONFIG } from '../config'
 
 export default function Home() {
   const { products } = useProducts()
   const { settings } = useSettings()
+  const { bundles } = useBundles()
+  const activeBundles = bundles.filter(b => b.status === 'active')
 
   const publicProducts = products.filter(p => p.status !== 'draft')
   const available = publicProducts.filter(p => p.status === 'available')
@@ -68,6 +72,22 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* ── Bundles / Promotions ── */}
+      {activeBundles.length > 0 && (
+        <section className="py-12 max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <span className="inline-block bg-brand-50 text-brand-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-2">🎁 Ofertas especiales</span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Packs y Promociones</h2>
+              <p className="text-gray-500 mt-1 text-sm">Combos a precios especiales — ¡más artículos, más ahorro!</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {activeBundles.map(b => <BundleCard key={b.id} bundle={b} products={products} />)}
+          </div>
+        </section>
+      )}
 
       {/* ── Featured products ── */}
       <section className="py-16 max-w-6xl mx-auto px-4 sm:px-6">

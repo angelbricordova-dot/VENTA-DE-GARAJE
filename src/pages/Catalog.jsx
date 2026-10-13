@@ -1,7 +1,9 @@
 import { useState, useMemo } from 'react'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
 import ProductCard from '../components/ProductCard'
+import BundleCard from '../components/BundleCard'
 import { useProducts } from '../hooks/useProducts'
+import { useBundles } from '../hooks/useBundles'
 import { CATEGORIES } from '../config'
 
 const STATUS_TABS = [
@@ -13,11 +15,13 @@ const STATUS_TABS = [
 
 export default function Catalog() {
   const { products } = useProducts()
+  const { bundles } = useBundles()
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [categoryFilter, setCategoryFilter] = useState('all')
 
   const publicProducts = useMemo(() => products.filter(p => p.status !== 'draft'), [products])
+  const activeBundles = useMemo(() => bundles.filter(b => b.status === 'active'), [bundles])
 
   const filtered = useMemo(() => {
     return publicProducts
@@ -53,6 +57,21 @@ export default function Catalog() {
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Catálogo completo</h1>
         <p className="text-gray-500 mt-1">{publicProducts.length} artículos en total · {countByStatus.available} disponibles ahora</p>
       </div>
+
+      {/* Bundles section */}
+      {activeBundles.length > 0 && (
+        <div className="mb-10">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-xl">🎁</span>
+            <h2 className="text-lg font-bold text-gray-900">Packs y Promociones</h2>
+            <span className="bg-brand-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">{activeBundles.length}</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {activeBundles.map(b => <BundleCard key={b.id} bundle={b} products={publicProducts} />)}
+          </div>
+          <div className="h-px bg-gray-100 mt-10" />
+        </div>
+      )}
 
       {/* Search */}
       <div className="relative mb-5">

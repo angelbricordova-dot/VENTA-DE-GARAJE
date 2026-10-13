@@ -120,6 +120,11 @@ export default function ProductDetail() {
             {product.condition && (
               <span className="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">{product.condition}</span>
             )}
+            {product.size && (
+              <span className="text-xs font-semibold text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">
+                Talla {product.size}
+              </span>
+            )}
             {product.stock > 0 && product.status === 'available' && (
               <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
                 product.stock === 1 ? 'text-amber-700 bg-amber-50' : 'text-gray-500 bg-gray-100'
