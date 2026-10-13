@@ -60,6 +60,15 @@ export default function ProductCard({ product }) {
         {product.category && (
           <span className="text-xs text-gray-400">{product.category} · {product.condition}</span>
         )}
+        {product.stock > 0 && product.status === 'available' && (
+          <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full w-fit ${
+            product.stock === 1
+              ? 'text-amber-700 bg-amber-50'
+              : 'text-gray-500 bg-gray-100'
+          }`}>
+            {product.stock === 1 ? '⚡ Última unidad' : `📦 ${product.stock} disponibles`}
+          </span>
+        )}
 
         <div className="flex items-baseline gap-2 mt-auto pt-2 flex-wrap">
           <span className="text-lg font-bold text-gray-900">

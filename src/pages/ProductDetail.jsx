@@ -1,16 +1,18 @@
 import { useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, MessageCircle, Share2, Tag, Package, MapPin } from 'lucide-react'
+import { ArrowLeft, MessageCircle, Share2, Tag, Package, MapPin, Clock } from 'lucide-react'
 import StatusBadge from '../components/StatusBadge'
 import { useProducts } from '../hooks/useProducts'
 import { useSettings } from '../hooks/useAdmin'
 import { SITE_CONFIG } from '../config'
 
-function buildWhatsappLink(phone, product) {
-  const msg = encodeURIComponent(
-    `Hola! Me interesa *${product.title}* que vi en tu venta de garaje. Sigue disponible?`
-  )
-  return `https://wa.me/${phone.replace(/\D/g, '')}?text=${msg}`
+function buildWhatsappLink(phone, product, mode = 'buy') {
+  const msgs = {
+    buy:     `Hola! Me interesa *${product.title}* que vi en tu venta de garaje. Sigue disponible?`,
+    reserve: `Hola! Me gustaría apartar *${product.title}* que vi en tu venta de garaje. Puedes reservarlo para mí?`,
+    consult: `Hola! Vi que *${product.title}* está apartado en tu venta de garaje. Sigue disponible?`,
+  }
+  return `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(msgs[mode])}`
 }
 
 export default function ProductDetail() {
@@ -118,6 +120,13 @@ export default function ProductDetail() {
             {product.condition && (
               <span className="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">{product.condition}</span>
             )}
+            {product.stock > 0 && product.status === 'available' && (
+              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                product.stock === 1 ? 'text-amber-700 bg-amber-50' : 'text-gray-500 bg-gray-100'
+              }`}>
+                {product.stock === 1 ? '⚡ Última unidad' : `📦 ${product.stock} unidades disponibles`}
+              </span>
+            )}
           </div>
 
           {/* Price */}
@@ -153,10 +162,10 @@ export default function ProductDetail() {
 
           {/* CTAs */}
           <div className="flex flex-col gap-3 mt-auto">
-            {!isSold ? (
+            {product.status === 'available' && (
               <>
                 <a
-                  href={buildWhatsappLink(phone, product)}
+                  href={buildWhatsappLink(phone, product, 'buy')}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-whatsapp w-full py-4 text-base"
@@ -164,11 +173,39 @@ export default function ProductDetail() {
                   <MessageCircle size={20} />
                   Quiero este artículo — WhatsApp
                 </a>
+                <a
+                  href={buildWhatsappLink(phone, product, 'reserve')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary w-full"
+                >
+                  <Clock size={16} /> Apartar / Reservar
+                </a>
                 <button onClick={handleShare} className="btn-secondary w-full">
                   <Share2 size={16} /> Compartir
                 </button>
               </>
-            ) : (
+            )}
+            {product.status === 'pending' && (
+              <>
+                <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 text-sm">
+                  <p className="font-semibold text-amber-800 mb-0.5">Este artículo está apartado</p>
+                  <p className="text-amber-700 text-xs">Puede que aún esté disponible — consulta directamente.</p>
+                </div>
+                <a
+                  href={buildWhatsappLink(phone, product, 'consult')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-whatsapp w-full"
+                >
+                  <MessageCircle size={16} /> Consultar disponibilidad
+                </a>
+                <button onClick={handleShare} className="btn-secondary w-full">
+                  <Share2 size={16} /> Compartir
+                </button>
+              </>
+            )}
+            {isSold && (
               <div className="text-center py-4">
                 <p className="text-gray-500 mb-3 text-sm">Este artículo ya fue vendido.</p>
                 <Link to="/catalogo" className="btn-primary">Ver artículos disponibles</Link>

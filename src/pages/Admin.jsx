@@ -97,7 +97,7 @@ function compressImage(file, maxPx = 800, quality = 0.75) {
 const emptyForm = {
   title: '', description: '', price: '', originalPrice: '', currency: 'USD',
   status: 'available', imageUrl: '', images: [], category: '', condition: 'Buen estado',
-  negotiable: false,
+  negotiable: false, stock: '',
 }
 
 function ProductForm({ initial = emptyForm, onSave, onCancel, title }) {
@@ -258,8 +258,22 @@ function ProductForm({ initial = emptyForm, onSave, onCancel, title }) {
               <input className="input pl-7" type="number" min="0" step="0.01" value={form.originalPrice} onChange={e => set('originalPrice', e.target.value)} placeholder="0.00" />
             </div>
           </div>
+          {/* Stock */}
+          <div>
+            <label className="label">Unidades disponibles</label>
+            <input
+              className="input"
+              type="number"
+              min="1"
+              step="1"
+              value={form.stock}
+              onChange={e => set('stock', e.target.value === '' ? '' : Number(e.target.value))}
+              placeholder="ej. 3"
+            />
+            <p className="text-xs text-gray-400 mt-1">Deja vacío para no mostrarlo</p>
+          </div>
           {/* Negotiable */}
-          <div className="sm:col-span-2">
+          <div className="flex items-end pb-3">
             <label className="flex items-center gap-3 cursor-pointer select-none">
               <input
                 type="checkbox"
@@ -267,8 +281,10 @@ function ProductForm({ initial = emptyForm, onSave, onCancel, title }) {
                 onChange={e => set('negotiable', e.target.checked)}
                 className="w-4 h-4 rounded accent-brand-500"
               />
-              <span className="text-sm font-medium text-gray-700">Precio negociable</span>
-              <span className="text-xs text-gray-400">Se mostrará en la publicación</span>
+              <div>
+                <span className="text-sm font-medium text-gray-700">Precio negociable</span>
+                <p className="text-xs text-gray-400">Se mostrará en la publicación</p>
+              </div>
             </label>
           </div>
           {/* Category */}
