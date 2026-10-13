@@ -97,6 +97,7 @@ function compressImage(file, maxPx = 800, quality = 0.75) {
 const emptyForm = {
   title: '', description: '', price: '', originalPrice: '', currency: 'USD',
   status: 'available', imageUrl: '', images: [], category: '', condition: 'Buen estado',
+  negotiable: false,
 }
 
 function ProductForm({ initial = emptyForm, onSave, onCancel, title }) {
@@ -256,6 +257,19 @@ function ProductForm({ initial = emptyForm, onSave, onCancel, title }) {
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
               <input className="input pl-7" type="number" min="0" step="0.01" value={form.originalPrice} onChange={e => set('originalPrice', e.target.value)} placeholder="0.00" />
             </div>
+          </div>
+          {/* Negotiable */}
+          <div className="sm:col-span-2">
+            <label className="flex items-center gap-3 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={!!form.negotiable}
+                onChange={e => set('negotiable', e.target.checked)}
+                className="w-4 h-4 rounded accent-brand-500"
+              />
+              <span className="text-sm font-medium text-gray-700">Precio negociable</span>
+              <span className="text-xs text-gray-400">Se mostrará en la publicación</span>
+            </label>
           </div>
           {/* Category */}
           <div>

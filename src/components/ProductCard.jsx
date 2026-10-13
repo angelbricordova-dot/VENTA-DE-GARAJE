@@ -61,12 +61,15 @@ export default function ProductCard({ product }) {
           <span className="text-xs text-gray-400">{product.category} · {product.condition}</span>
         )}
 
-        <div className="flex items-baseline gap-2 mt-auto pt-2">
+        <div className="flex items-baseline gap-2 mt-auto pt-2 flex-wrap">
           <span className="text-lg font-bold text-gray-900">
             ${product.price} <span className="text-xs font-normal text-gray-500">{product.currency}</span>
           </span>
           {product.originalPrice && (
             <span className="text-sm text-gray-400 line-through">${product.originalPrice}</span>
+          )}
+          {product.negotiable && (
+            <span className="text-xs text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full">Negociable</span>
           )}
         </div>
 

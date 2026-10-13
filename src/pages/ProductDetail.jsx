@@ -121,13 +121,16 @@ export default function ProductDetail() {
           </div>
 
           {/* Price */}
-          <div className="flex items-baseline gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
             <span className="text-4xl font-black text-gray-900">
               ${product.price}
               <span className="text-lg font-normal text-gray-400 ml-1">{product.currency}</span>
             </span>
             {product.originalPrice && (
               <span className="text-xl text-gray-400 line-through font-medium">${product.originalPrice}</span>
+            )}
+            {product.negotiable && (
+              <span className="text-sm font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">🤝 Negociable</span>
             )}
           </div>
 
