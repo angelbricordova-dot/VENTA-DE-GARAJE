@@ -46,6 +46,7 @@ export const SETTINGS_KEY = 'vg_settings'
 export const DEFAULT_ADMIN_PASSWORD = 'garaje2024'
 
 export const CATEGORIES = [
+  'Accesorios',
   'Electrónicos',
   'Ropa',
   'Calzado',
