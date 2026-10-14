@@ -26,10 +26,10 @@ export default function Home() {
         className="relative overflow-hidden"
         style={{
           background: `
-            radial-gradient(ellipse at 10% 50%, rgba(253, 224, 71, 0.55) 0%, transparent 52%),
-            radial-gradient(ellipse at 90% 10%, rgba(120, 53, 15, 0.55) 0%, transparent 45%),
-            radial-gradient(ellipse at 60% 90%, rgba(180, 83, 9, 0.35) 0%, transparent 40%),
-            linear-gradient(135deg, #F59E0B 0%, #D97706 55%, #92400E 100%)
+            radial-gradient(ellipse at 50% -5%, rgba(253, 230, 138, 0.55) 0%, transparent 58%),
+            radial-gradient(ellipse at 15% 100%, rgba(120, 53, 15, 0.55) 0%, transparent 45%),
+            radial-gradient(ellipse at 85% 95%, rgba(92, 40, 14, 0.45) 0%, transparent 40%),
+            linear-gradient(170deg, #FBBF24 0%, #F59E0B 40%, #D97706 70%, #92400E 100%)
           `
         }}
       >
