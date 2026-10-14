@@ -145,7 +145,11 @@ export default function Catalog() {
         <>
           <p className="text-xs text-gray-400 mb-4">{filtered.length} resultado{filtered.length !== 1 ? 's' : ''}</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filtered.map(p => <ProductCard key={p.id} product={p} />)}
+            {filtered.map((p, i) => (
+              <div key={p.id} className="animate-fade-in-up" style={{ animationDelay: `${Math.min(i, 10) * 40}ms` }}>
+                <ProductCard product={p} />
+              </div>
+            ))}
           </div>
         </>
       ) : (

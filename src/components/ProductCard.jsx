@@ -15,7 +15,7 @@ export default function ProductCard({ product }) {
   const isSold = product.status === 'sold'
 
   return (
-    <div className={`card group flex flex-col ${isSold ? 'opacity-70' : ''}`}>
+    <div className={`card group flex flex-col h-full ${isSold ? 'opacity-70' : ''}`}>
       {/* Image */}
       <Link to={`/producto/${product.id}`} className="block relative overflow-hidden aspect-square bg-gray-100">
         {product.imageUrl ? (

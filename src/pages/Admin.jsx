@@ -72,20 +72,25 @@ function AdminLogin({ onLogin }) {
 }
 
 // ─── Image Upload Helper ──────────────────────────────────────────────────────
-function compressImage(file, maxPx = 800, quality = 0.75) {
+function compressImage(file, maxPx = 680, targetBytes = 65536) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = ev => {
       const img = new Image()
       img.onload = () => {
         const scale = Math.min(1, maxPx / Math.max(img.width, img.height))
-        const w = Math.round(img.width * scale)
-        const h = Math.round(img.height * scale)
         const canvas = document.createElement('canvas')
-        canvas.width = w
-        canvas.height = h
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h)
-        resolve(canvas.toDataURL('image/jpeg', quality))
+        canvas.width  = Math.round(img.width  * scale)
+        canvas.height = Math.round(img.height * scale)
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
+        let q = 0.76
+        let url = canvas.toDataURL('image/jpeg', q)
+        // base64 adds ~4/3 overhead; reduce quality until within budget
+        while (url.length > targetBytes * 1.4 && q > 0.30) {
+          q = +(q - 0.08).toFixed(2)
+          url = canvas.toDataURL('image/jpeg', q)
+        }
+        resolve(url)
       }
       img.onerror = reject
       img.src = ev.target.result

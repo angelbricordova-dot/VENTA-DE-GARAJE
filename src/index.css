@@ -56,3 +56,20 @@
   50% { opacity: 0.5; }
 }
 .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+.animate-fade-in-up { animation: fadeInUp 0.42s ease-out both; }
+.animate-scale-in   { animation: scaleIn  0.30s ease-out both; }
+.animate-float-y    { animation: floatY   3.5s ease-in-out infinite; }

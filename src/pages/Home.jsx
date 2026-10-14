@@ -23,24 +23,24 @@ export default function Home() {
     <main>
       {/* ── Hero ── */}
       <section className="relative overflow-hidden bg-gradient-to-br from-brand-500 via-brand-600 to-amber-700">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 text-8xl">🏷️</div>
-          <div className="absolute top-1/3 right-16 text-6xl">📦</div>
-          <div className="absolute bottom-12 left-1/4 text-5xl">✨</div>
-          <div className="absolute bottom-6 right-1/3 text-7xl">💸</div>
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+          <div className="absolute top-10 left-10 text-8xl animate-float-y" style={{ animationDelay: '0s', animationDuration: '3.5s' }}>🏷️</div>
+          <div className="absolute top-1/3 right-16 text-6xl animate-float-y" style={{ animationDelay: '0.8s', animationDuration: '4s' }}>📦</div>
+          <div className="absolute bottom-12 left-1/4 text-5xl animate-float-y" style={{ animationDelay: '1.5s', animationDuration: '3s' }}>✨</div>
+          <div className="absolute bottom-6 right-1/3 text-7xl animate-float-y" style={{ animationDelay: '0.4s', animationDuration: '4.5s' }}>💸</div>
         </div>
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center text-white">
-          <span className="inline-block bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-4 py-2 rounded-full mb-6">
+          <span className="inline-block bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-4 py-2 rounded-full mb-6 animate-scale-in">
             🎉 {available.length} artículos disponibles ahora mismo
           </span>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-4 leading-tight">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-4 leading-tight animate-fade-in-up" style={{ animationDelay: '80ms' }}>
             ¡Gran Venta<br />de Garaje! 🏷️
           </h1>
-          <p className="text-lg sm:text-xl text-white/85 max-w-xl mx-auto mb-8">
+          <p className="text-lg sm:text-xl text-white/85 max-w-xl mx-auto mb-8 animate-fade-in-up" style={{ animationDelay: '180ms' }}>
             Artículos usados en excelente estado a precios increíbles.<br />
             Encontralos, escríbeme y ¡listo!
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center animate-fade-in-up" style={{ animationDelay: '280ms' }}>
             <Link to="/catalogo" className="inline-flex items-center justify-center gap-2 bg-white text-brand-700 font-bold px-7 py-3.5 rounded-xl hover:bg-brand-50 transition-colors text-base active:scale-95">
               Ver catálogo completo <ArrowRight size={18} />
             </Link>
@@ -103,7 +103,11 @@ export default function Home() {
 
         {featured.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-5">
-            {featured.map(p => <ProductCard key={p.id} product={p} />)}
+            {featured.map((p, i) => (
+              <div key={p.id} className="animate-fade-in-up" style={{ animationDelay: `${i * 60}ms` }}>
+                <ProductCard product={p} />
+              </div>
+            ))}
           </div>
         ) : (
           <div className="text-center py-16 text-gray-400">
@@ -161,8 +165,8 @@ export default function Home() {
             { step: '1', icon: '👀', title: 'Explora el catálogo', desc: 'Navega todos los artículos disponibles y encuentra lo que necesitas.' },
             { step: '2', icon: '💬', title: 'Escríbeme al WhatsApp', desc: 'Haz clic en "Lo quiero" y te conecto directamente al chat.' },
             { step: '3', icon: '🤝', title: 'Coordinamos la entrega', desc: 'Acordamos el punto de entrega o el envío nacional que más te convenga.' },
-          ].map(s => (
-            <div key={s.step} className="flex flex-col items-center gap-3 p-6 bg-white rounded-2xl shadow-card">
+          ].map((s, i) => (
+            <div key={s.step} className="flex flex-col items-center gap-3 p-6 bg-white rounded-2xl shadow-card animate-fade-in-up" style={{ animationDelay: `${i * 100}ms` }}>
               <div className="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center text-2xl">{s.icon}</div>
               <span className="text-xs font-bold text-brand-500 uppercase tracking-wider">Paso {s.step}</span>
               <h3 className="font-bold text-gray-900">{s.title}</h3>
