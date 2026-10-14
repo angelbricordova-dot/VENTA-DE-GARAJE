@@ -26,8 +26,8 @@ export default function CustomCursor() {
     const up   = () => wrapRef.current?.classList.remove('is-clicking')
 
     const tick = () => {
-      smooth.current.x += (mouse.current.x - smooth.current.x) * 0.20
-      smooth.current.y += (mouse.current.y - smooth.current.y) * 0.20
+      smooth.current.x += (mouse.current.x - smooth.current.x) * 0.75
+      smooth.current.y += (mouse.current.y - smooth.current.y) * 0.75
       if (wrapRef.current) {
         wrapRef.current.style.left = smooth.current.x + 'px'
         wrapRef.current.style.top  = smooth.current.y + 'px'
@@ -52,9 +52,18 @@ export default function CustomCursor() {
   }, [])
 
   return (
-    <div ref={wrapRef} className="cursor-tag-wrap" aria-hidden="true">
-      <span className="cursor-tag-emoji">🏷️</span>
-      <span className="cursor-tag-label">¡Lo quiero!</span>
+    <div ref={wrapRef} className="cursor-wrap" aria-hidden="true">
+      <svg className="cursor-arrow" viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M2.5 1.5 L2.5 19 L6.5 14.5 L9.5 22 L12 21 L9 13.5 L15.5 13.5 Z"
+          fill="white"
+          stroke="#1C1C1E"
+          strokeWidth="1.6"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+        />
+      </svg>
+      <span className="cursor-label">✨ ¡Lo quiero!</span>
     </div>
   )
 }

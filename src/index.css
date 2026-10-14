@@ -78,48 +78,56 @@
 .custom-cursor-active,
 .custom-cursor-active * { cursor: none !important; }
 
-.cursor-tag-wrap {
+.cursor-wrap {
   position: fixed;
   top: 0; left: 0;
   pointer-events: none;
   z-index: 9999;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transform: translate(-4px, -4px);
   will-change: left, top;
 }
-.cursor-tag-emoji {
-  font-size: 22px;
-  line-height: 1;
+
+.cursor-arrow {
+  width: 22px;
+  height: 28px;
   display: block;
-  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.18));
-  transition: transform 0.12s ease;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.28));
+  transition: transform 0.1s ease;
 }
-.cursor-tag-label {
+
+.cursor-label {
+  position: absolute;
+  top: 16px;
+  left: 22px;
   background: #F59E0B;
   color: #fff;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  font-family: system-ui, sans-serif;
-  padding: 3px 9px;
+  font-family: system-ui, -apple-system, sans-serif;
+  padding: 5px 13px;
   border-radius: 20px;
   white-space: nowrap;
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 14px rgba(245,158,11,0.45), 0 1px 4px rgba(0,0,0,0.12);
   opacity: 0;
-  transform: translateX(-8px) scale(0.85);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translateY(6px) scale(0.88);
+  transition: opacity 0.22s cubic-bezier(0.34,1.56,0.64,1),
+              transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
 }
-.cursor-tag-wrap.on-product .cursor-tag-label {
+
+.cursor-wrap.on-product .cursor-label {
   opacity: 1;
-  transform: translateX(0) scale(1);
+  transform: translateY(0) scale(1);
 }
-.cursor-tag-wrap.on-interactive .cursor-tag-emoji {
-  transform: scale(1.2) rotate(-12deg);
+
+.cursor-wrap.on-interactive .cursor-arrow {
+  transform: scale(1.12);
 }
-.cursor-tag-wrap.is-clicking .cursor-tag-emoji {
-  transform: scale(0.7) rotate(8deg);
+
+.cursor-wrap.is-clicking .cursor-arrow {
+  transform: scale(0.82);
 }
-.cursor-tag-wrap.is-clicking.on-product .cursor-tag-label {
-  transform: translateX(0) scale(0.9);
-  opacity: 0.8;
+
+.cursor-wrap.is-clicking.on-product .cursor-label {
+  transform: translateY(0) scale(0.94);
+  opacity: 0.85;
 }
