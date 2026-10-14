@@ -71,7 +71,7 @@ export default function ProductCard({ product }) {
         <div className="flex items-start justify-between gap-2">
           <Link
             to={`/producto/${product.id}`}
-            className="font-semibold text-gray-900 text-sm leading-snug line-clamp-2 hover:text-brand-600 transition-colors flex-1"
+            className="font-semibold text-gray-900 dark:text-gray-100 text-sm leading-snug line-clamp-2 hover:text-brand-600 transition-colors flex-1"
           >
             {product.title}
           </Link>
@@ -82,22 +82,22 @@ export default function ProductCard({ product }) {
           <span className="text-xs text-gray-400">{product.category} · {product.condition}</span>
         )}
         {product.size && (
-          <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full w-fit">
+          <span className="text-xs font-medium text-gray-500 bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-0.5 rounded-full w-fit">
             Talla {product.size}
           </span>
         )}
         {product.stock > 0 && product.status === 'available' && (
           <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full w-fit ${
             product.stock === 1
-              ? 'text-amber-700 bg-amber-50'
-              : 'text-gray-500 bg-gray-100'
+              ? 'text-amber-700 bg-amber-50 dark:bg-amber-900/30 dark:text-amber-400'
+              : 'text-gray-500 bg-gray-100 dark:bg-gray-700 dark:text-gray-400'
           }`}>
             {product.stock === 1 ? '⚡ Última unidad' : `📦 ${product.stock} disponibles`}
           </span>
         )}
 
         <div className="flex items-baseline gap-2 mt-auto pt-1.5 flex-wrap">
-          <span className="text-base font-bold text-gray-900">
+          <span className="text-base font-bold text-gray-900 dark:text-gray-100">
             ${product.price} <span className="text-xs font-normal text-gray-500">{product.currency}</span>
           </span>
           {product.originalPrice && (

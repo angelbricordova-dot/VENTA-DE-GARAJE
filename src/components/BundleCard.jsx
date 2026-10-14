@@ -20,9 +20,9 @@ export default function BundleCard({ bundle, products }) {
   )}`
 
   return (
-    <div className="bg-white rounded-3xl shadow-card overflow-hidden border border-amber-100 flex flex-col">
+    <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-card overflow-hidden border border-amber-100 dark:border-amber-900/30 flex flex-col">
       {/* Thumbnails */}
-      <div className="relative bg-gradient-to-r from-amber-50 to-brand-50 p-4">
+      <div className="relative bg-gradient-to-r from-amber-50 to-brand-50 dark:from-amber-900/20 dark:to-brand-900/20 p-4">
         {savings > 0 && (
           <div className="absolute top-3 right-3 bg-brand-500 text-white text-xs font-bold px-2.5 py-1 rounded-xl">
             -{savings}% OFF
@@ -30,7 +30,7 @@ export default function BundleCard({ bundle, products }) {
         )}
         <div className="flex gap-2 flex-wrap">
           {bundleProducts.slice(0, 4).map(p => (
-            <div key={p.id} className="w-16 h-16 rounded-xl overflow-hidden bg-gray-100 border-2 border-white shadow-sm shrink-0">
+            <div key={p.id} className="w-16 h-16 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-700 border-2 border-white shadow-sm shrink-0">
               {p.imageUrl || (p.images && p.images[0]) ? (
                 <img
                   src={p.imageUrl || p.images[0]}
@@ -43,7 +43,7 @@ export default function BundleCard({ bundle, products }) {
             </div>
           ))}
           {bundleProducts.length > 4 && (
-            <div className="w-16 h-16 rounded-xl bg-gray-200 border-2 border-white shadow-sm flex items-center justify-center text-xs font-bold text-gray-500">
+            <div className="w-16 h-16 rounded-xl bg-gray-200 dark:bg-gray-700 border-2 border-white shadow-sm flex items-center justify-center text-xs font-bold text-gray-500 dark:text-gray-400">
               +{bundleProducts.length - 4}
             </div>
           )}
@@ -53,16 +53,16 @@ export default function BundleCard({ bundle, products }) {
       {/* Content */}
       <div className="p-4 flex flex-col flex-1 gap-3">
         <div>
-          <h3 className="font-bold text-gray-900 text-base leading-tight">{bundle.title}</h3>
+          <h3 className="font-bold text-gray-900 dark:text-gray-100 text-base leading-tight">{bundle.title}</h3>
           {bundle.description && (
-            <p className="text-sm text-gray-500 mt-1 line-clamp-2">{bundle.description}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">{bundle.description}</p>
           )}
         </div>
 
         {/* Items */}
         <div className="flex flex-col gap-0.5">
           {bundleProducts.map(p => (
-            <div key={p.id} className="flex items-center justify-between text-xs text-gray-500">
+            <div key={p.id} className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
               <span className="truncate flex-1 mr-2">• {p.title}</span>
               <span className="font-medium shrink-0">${p.price} {p.currency}</span>
             </div>
@@ -71,7 +71,7 @@ export default function BundleCard({ bundle, products }) {
 
         {/* Price */}
         <div className="flex items-baseline gap-2 flex-wrap mt-auto">
-          <span className="text-2xl font-black text-gray-900">
+          <span className="text-2xl font-black text-gray-900 dark:text-gray-100">
             ${bundle.price}
             <span className="text-sm font-normal text-gray-400 ml-1">{bundle.currency || 'USD'}</span>
           </span>

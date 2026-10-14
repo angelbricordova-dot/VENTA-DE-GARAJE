@@ -9,6 +9,7 @@ import DeliveryPage from './pages/DeliveryPage'
 import Admin from './pages/Admin'
 import Legal from './pages/Legal'
 import NotFound from './pages/NotFound'
+import { ThemeProvider } from './context/ThemeContext'
 
 function Layout({ children }) {
   return (
@@ -24,7 +25,7 @@ function Layout({ children }) {
 
 export default function App() {
   return (
-    <>
+    <ThemeProvider>
     <CustomCursor />
     <Routes>
       {/* Admin — no layout */}
@@ -42,6 +43,6 @@ export default function App() {
       {/* 404 */}
       <Route path="*" element={<Layout><NotFound /></Layout>} />
     </Routes>
-    </>
+    </ThemeProvider>
   )
 }

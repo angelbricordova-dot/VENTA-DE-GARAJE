@@ -57,7 +57,7 @@ export default function Home() {
       </section>
 
       {/* ── Stats strip ── */}
-      <section className="bg-gray-900 text-white">
+      <section className="bg-gray-900 dark:bg-black text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-sm">
           {[
             { label: 'Disponibles', value: available.length, icon: '✅' },
@@ -78,9 +78,9 @@ export default function Home() {
         <section className="py-12 max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <span className="inline-block bg-brand-50 text-brand-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-2">🎁 Ofertas especiales</span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Packs y Promociones</h2>
-              <p className="text-gray-500 mt-1 text-sm">Combos a precios especiales — ¡más artículos, más ahorro!</p>
+              <span className="inline-block bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 text-xs font-semibold px-3 py-1.5 rounded-full mb-2">🎁 Ofertas especiales</span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">Packs y Promociones</h2>
+              <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">Combos a precios especiales — ¡más artículos, más ahorro!</p>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -93,8 +93,8 @@ export default function Home() {
       <section className="py-16 max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Artículos destacados</h2>
-            <p className="text-gray-500 mt-1 text-sm">Los más recientes y en mejores condiciones</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">Artículos destacados</h2>
+            <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">Los más recientes y en mejores condiciones</p>
           </div>
           <Link to="/catalogo" className="text-brand-600 font-semibold text-sm hover:text-brand-700 flex items-center gap-1">
             Ver todos <ArrowRight size={15} />
@@ -129,11 +129,11 @@ export default function Home() {
       <DeliveryInfo />
 
       {/* ── Social proof / funnel ── */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
-          <span className="inline-block bg-brand-50 text-brand-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-3">📱 Sígueme</span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Encuéntrame también en</h2>
-          <p className="text-gray-500 mb-8">Publica tus preguntas, mira videos de los artículos y más novedades</p>
+          <span className="inline-block bg-brand-50 dark:bg-brand-900/20 text-brand-700 dark:text-brand-400 text-xs font-semibold px-3 py-1.5 rounded-full mb-3">📱 Sígueme</span>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3">Encuéntrame también en</h2>
+          <p className="text-gray-500 dark:text-gray-400 mb-8">Publica tus preguntas, mira videos de los artículos y más novedades</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href={SITE_CONFIG.socialMedia.facebook}
@@ -158,7 +158,7 @@ export default function Home() {
       {/* ── How it works ── */}
       <section className="py-16 max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">¿Cómo comprar?</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">¿Cómo comprar?</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
           {[
@@ -166,11 +166,11 @@ export default function Home() {
             { step: '2', icon: '💬', title: 'Escríbeme al WhatsApp', desc: 'Haz clic en "Lo quiero" y te conecto directamente al chat.' },
             { step: '3', icon: '🤝', title: 'Coordinamos la entrega', desc: 'Acordamos el punto de entrega o el envío nacional que más te convenga.' },
           ].map((s, i) => (
-            <div key={s.step} className="flex flex-col items-center gap-3 p-6 bg-white rounded-2xl shadow-card animate-fade-in-up" style={{ animationDelay: `${i * 100}ms` }}>
+            <div key={s.step} className="flex flex-col items-center gap-3 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-card animate-fade-in-up" style={{ animationDelay: `${i * 100}ms` }}>
               <div className="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center text-2xl">{s.icon}</div>
               <span className="text-xs font-bold text-brand-500 uppercase tracking-wider">Paso {s.step}</span>
-              <h3 className="font-bold text-gray-900">{s.title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
+              <h3 className="font-bold text-gray-900 dark:text-gray-100">{s.title}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{s.desc}</p>
             </div>
           ))}
         </div>

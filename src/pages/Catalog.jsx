@@ -75,8 +75,8 @@ export default function Catalog() {
     <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       {/* Page header */}
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Catálogo completo</h1>
-        <p className="text-gray-500 mt-1">{publicProducts.length} artículos en total · {countByStatus.available} disponibles ahora</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">Catálogo completo</h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">{publicProducts.length} artículos en total · {countByStatus.available} disponibles ahora</p>
       </div>
 
       {/* Bundles section */}
@@ -84,7 +84,7 @@ export default function Catalog() {
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-4">
             <span className="text-xl">🎁</span>
-            <h2 className="text-lg font-bold text-gray-900">Packs y Promociones</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Packs y Promociones</h2>
             <span className="bg-brand-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">{activeBundles.length}</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -120,7 +120,7 @@ export default function Catalog() {
             className={`px-4 py-2 rounded-xl text-sm font-medium transition-all border ${
               statusFilter === tab.key
                 ? 'bg-brand-500 text-white border-brand-500'
-                : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700'
             }`}
           >
             {tab.label}
@@ -139,8 +139,8 @@ export default function Catalog() {
             onClick={() => setCategoryFilter('all')}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${
               categoryFilter === 'all'
-                ? 'bg-gray-900 text-white border-gray-900'
-                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                ? 'bg-gray-900 text-white border-gray-900 dark:bg-gray-100 dark:text-gray-900'
+                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700'
             }`}
           >
             Todas las categorías
@@ -151,8 +151,8 @@ export default function Catalog() {
               onClick={() => setCategoryFilter(cat)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${
                 categoryFilter === cat
-                  ? 'bg-gray-900 text-white border-gray-900'
-                  : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                  ? 'bg-gray-900 text-white border-gray-900 dark:bg-gray-100 dark:text-gray-900'
+                  : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700'
               }`}
             >
               {cat}
@@ -174,8 +174,8 @@ export default function Catalog() {
                   onClick={() => setSortBy(o.key)}
                   className={`text-xs px-2.5 py-1 rounded-lg font-medium transition-all border ${
                     sortBy === o.key
-                      ? 'bg-gray-900 text-white border-gray-900'
-                      : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'
+                      ? 'bg-gray-900 text-white border-gray-900 dark:bg-gray-100 dark:text-gray-900'
+                      : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-500 dark:border-gray-700'
                   }`}
                 >
                   {o.label}
@@ -194,7 +194,7 @@ export default function Catalog() {
       ) : (
         <div className="text-center py-20 text-gray-400">
           <div className="text-5xl mb-4">🔍</div>
-          <p className="font-medium text-gray-600">No se encontraron artículos</p>
+          <p className="font-medium text-gray-600 dark:text-gray-400">No se encontraron artículos</p>
           <p className="text-sm mt-1">Intenta con otro término o elimina los filtros</p>
           <button onClick={clearAll} className="btn-secondary mt-4">
             Limpiar filtros
