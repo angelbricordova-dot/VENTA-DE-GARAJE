@@ -31,7 +31,7 @@ export default function ProductDetail() {
     return (
       <main className="max-w-lg mx-auto px-4 py-24 text-center">
         <div className="text-6xl mb-4">🔦</div>
-        <h1 className="text-xl font-bold text-gray-800 mb-2">Artículo no encontrado</h1>
+        <h1 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">Artículo no encontrado</h1>
         <p className="text-gray-500 mb-6">Es posible que haya sido eliminado o el enlace sea incorrecto.</p>
         <Link to="/catalogo" className="btn-primary">Ver catálogo</Link>
       </main>
@@ -56,7 +56,7 @@ export default function ProductDetail() {
       {/* Breadcrumb */}
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 mb-6 transition-colors"
+        className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 mb-6 transition-colors"
       >
         <ArrowLeft size={16} /> Volver
       </button>
@@ -64,7 +64,7 @@ export default function ProductDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
         {/* Image gallery */}
         <div className="flex flex-col gap-3">
-          <div className="relative rounded-3xl overflow-hidden bg-gray-100 aspect-square">
+          <div className="relative rounded-3xl overflow-hidden bg-gray-100 dark:bg-gray-800 aspect-square">
             {images.length > 0 ? (
               <img
                 src={images[selectedIdx]}
@@ -112,22 +112,22 @@ export default function ProductDetail() {
                 <Tag size={12} /> {product.category}
               </span>
             )}
-            <h1 className="text-2xl sm:text-3xl font-black text-gray-900 leading-tight">{product.title}</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-gray-100 leading-tight">{product.title}</h1>
           </div>
 
           <div className="flex items-center gap-3 flex-wrap">
             <StatusBadge status={product.status} />
             {product.condition && (
-              <span className="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">{product.condition}</span>
+              <span className="text-xs text-gray-400 bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2.5 py-1 rounded-full">{product.condition}</span>
             )}
             {product.size && (
-              <span className="text-xs font-semibold text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">
+              <span className="text-xs font-semibold text-gray-600 bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2.5 py-1 rounded-full">
                 Talla {product.size}
               </span>
             )}
             {product.stock > 0 && product.status === 'available' && (
               <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
-                product.stock === 1 ? 'text-amber-700 bg-amber-50' : 'text-gray-500 bg-gray-100'
+                product.stock === 1 ? 'text-amber-700 bg-amber-50 dark:bg-amber-900/30 dark:text-amber-400' : 'text-gray-500 bg-gray-100 dark:bg-gray-700 dark:text-gray-400'
               }`}>
                 {product.stock === 1 ? '⚡ Última unidad' : `📦 ${product.stock} unidades disponibles`}
               </span>
@@ -136,7 +136,7 @@ export default function ProductDetail() {
 
           {/* Price */}
           <div className="flex items-center gap-3 flex-wrap">
-            <span className="text-4xl font-black text-gray-900">
+            <span className="text-4xl font-black text-gray-900 dark:text-gray-100">
               ${product.price}
               <span className="text-lg font-normal text-gray-400 ml-1">{product.currency}</span>
             </span>
@@ -151,17 +151,17 @@ export default function ProductDetail() {
           {/* Description */}
           {product.description && (
             <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">Descripción</h3>
-              <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{product.description}</p>
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Descripción</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed whitespace-pre-line">{product.description}</p>
             </div>
           )}
 
           {/* Delivery note */}
-          <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 flex gap-3">
+          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-900/30 rounded-2xl p-4 flex gap-3">
             <MapPin size={18} className="text-amber-600 mt-0.5 shrink-0" />
             <div className="text-sm">
-              <span className="font-semibold text-amber-800">Entregas disponibles</span>
-              <p className="text-amber-700 mt-0.5">Maracay (Lun–Vie) · Caracas (Lun–Vie) · Valencia (Sáb–Dom) · Nacional MRW/Zoom</p>
+              <span className="font-semibold text-amber-800 dark:text-amber-400">Entregas disponibles</span>
+              <p className="text-amber-700 dark:text-amber-300 mt-0.5">Maracay (Lun–Vie) · Caracas (Lun–Vie) · Valencia (Sáb–Dom) · Nacional MRW/Zoom</p>
             </div>
           </div>
 
@@ -193,9 +193,9 @@ export default function ProductDetail() {
             )}
             {product.status === 'pending' && (
               <>
-                <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 text-sm">
-                  <p className="font-semibold text-amber-800 mb-0.5">Este artículo está apartado</p>
-                  <p className="text-amber-700 text-xs">Puede que aún esté disponible — consulta directamente.</p>
+                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-900/30 rounded-2xl p-4 text-sm">
+                  <p className="font-semibold text-amber-800 dark:text-amber-400 mb-0.5">Este artículo está apartado</p>
+                  <p className="text-amber-700 dark:text-amber-300 text-xs">Puede que aún esté disponible — consulta directamente.</p>
                 </div>
                 <a
                   href={buildWhatsappLink(phone, product, 'consult')}
@@ -223,7 +223,7 @@ export default function ProductDetail() {
       {/* Related */}
       {related.length > 0 && (
         <div className="mt-16">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Más de {product.category}</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">Más de {product.category}</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {related.map(p => (
               <Link
@@ -231,7 +231,7 @@ export default function ProductDetail() {
                 to={`/producto/${p.id}`}
                 className="card flex flex-col group"
               >
-                <div className="aspect-square bg-gray-100 overflow-hidden">
+                <div className="aspect-square bg-gray-100 dark:bg-gray-800 overflow-hidden">
                   {p.imageUrl ? (
                     <img src={p.imageUrl} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                   ) : (
@@ -239,8 +239,8 @@ export default function ProductDetail() {
                   )}
                 </div>
                 <div className="p-3">
-                  <p className="text-sm font-semibold text-gray-800 line-clamp-2">{p.title}</p>
-                  <p className="text-sm font-bold text-gray-900 mt-1">${p.price} <span className="font-normal text-gray-400 text-xs">{p.currency}</span></p>
+                  <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 line-clamp-2">{p.title}</p>
+                  <p className="text-sm font-bold text-gray-900 dark:text-gray-100 mt-1">${p.price} <span className="font-normal text-gray-400 text-xs">{p.currency}</span></p>
                 </div>
               </Link>
             ))}
