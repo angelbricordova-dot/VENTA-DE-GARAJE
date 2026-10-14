@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 export default function CustomCursor() {
-  const dotRef  = useRef(null)
-  const ringRef = useRef(null)
+  const wrapRef = useRef(null)
   const mouse   = useRef({ x: -300, y: -300 })
   const smooth  = useRef({ x: -300, y: -300 })
   const raf     = useRef(null)
@@ -14,32 +13,24 @@ export default function CustomCursor() {
 
     const move = ({ clientX: x, clientY: y }) => {
       mouse.current = { x, y }
-      if (dotRef.current) {
-        dotRef.current.style.left = x + 'px'
-        dotRef.current.style.top  = y + 'px'
-      }
     }
 
     const over = ({ target }) => {
-      const interactive = target.closest('a, button, [role="button"], input, select, textarea, label')
-      ringRef.current?.classList.toggle('is-hovering', !!interactive)
+      const onProduct     = !!target.closest('.card')
+      const onInteractive = !!target.closest('a, button, [role="button"]') && !onProduct
+      wrapRef.current?.classList.toggle('on-product',     onProduct)
+      wrapRef.current?.classList.toggle('on-interactive', onInteractive)
     }
 
-    const down = () => {
-      dotRef.current?.classList.add('is-clicking')
-      ringRef.current?.classList.add('is-clicking')
-    }
-    const up = () => {
-      dotRef.current?.classList.remove('is-clicking')
-      ringRef.current?.classList.remove('is-clicking')
-    }
+    const down = () => wrapRef.current?.classList.add('is-clicking')
+    const up   = () => wrapRef.current?.classList.remove('is-clicking')
 
     const tick = () => {
-      smooth.current.x += (mouse.current.x - smooth.current.x) * 0.13
-      smooth.current.y += (mouse.current.y - smooth.current.y) * 0.13
-      if (ringRef.current) {
-        ringRef.current.style.left = smooth.current.x + 'px'
-        ringRef.current.style.top  = smooth.current.y + 'px'
+      smooth.current.x += (mouse.current.x - smooth.current.x) * 0.20
+      smooth.current.y += (mouse.current.y - smooth.current.y) * 0.20
+      if (wrapRef.current) {
+        wrapRef.current.style.left = smooth.current.x + 'px'
+        wrapRef.current.style.top  = smooth.current.y + 'px'
       }
       raf.current = requestAnimationFrame(tick)
     }
@@ -61,9 +52,9 @@ export default function CustomCursor() {
   }, [])
 
   return (
-    <>
-      <div ref={dotRef}  className="cursor-dot"  />
-      <div ref={ringRef} className="cursor-ring" />
-    </>
+    <div ref={wrapRef} className="cursor-tag-wrap" aria-hidden="true">
+      <span className="cursor-tag-emoji">🏷️</span>
+      <span className="cursor-tag-label">¡Lo quiero!</span>
+    </div>
   )
 }

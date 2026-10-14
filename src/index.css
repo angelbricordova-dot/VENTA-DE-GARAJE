@@ -78,27 +78,48 @@
 .custom-cursor-active,
 .custom-cursor-active * { cursor: none !important; }
 
-.cursor-dot,
-.cursor-ring {
+.cursor-tag-wrap {
   position: fixed;
   top: 0; left: 0;
-  border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
-  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transform: translate(-4px, -4px);
   will-change: left, top;
 }
-.cursor-dot {
-  width: 9px; height: 9px;
+.cursor-tag-emoji {
+  font-size: 22px;
+  line-height: 1;
+  display: block;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.18));
+  transition: transform 0.12s ease;
+}
+.cursor-tag-label {
   background: #F59E0B;
-  transition: transform 0.08s ease, background 0.12s;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: system-ui, sans-serif;
+  padding: 3px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-8px) scale(0.85);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
-.cursor-ring {
-  width: 30px; height: 30px;
-  border: 2px solid rgba(245, 158, 11, 0.45);
-  transition: width 0.2s ease, height 0.2s ease,
-              border-color 0.2s ease, opacity 0.2s ease;
+.cursor-tag-wrap.on-product .cursor-tag-label {
+  opacity: 1;
+  transform: translateX(0) scale(1);
 }
-.cursor-dot.is-clicking  { transform: translate(-50%, -50%) scale(0.45); background: #D97706; }
-.cursor-ring.is-clicking { width: 52px; height: 52px; opacity: 0.15; }
-.cursor-ring.is-hovering { width: 46px; height: 46px; border-color: rgba(245, 158, 11, 0.75); }
+.cursor-tag-wrap.on-interactive .cursor-tag-emoji {
+  transform: scale(1.2) rotate(-12deg);
+}
+.cursor-tag-wrap.is-clicking .cursor-tag-emoji {
+  transform: scale(0.7) rotate(8deg);
+}
+.cursor-tag-wrap.is-clicking.on-product .cursor-tag-label {
+  transform: translateX(0) scale(0.9);
+  opacity: 0.8;
+}
