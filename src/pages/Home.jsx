@@ -22,7 +22,17 @@ export default function Home() {
   return (
     <main>
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-brand-500 via-brand-600 to-amber-700">
+      <section
+        className="relative overflow-hidden"
+        style={{
+          background: `
+            radial-gradient(ellipse at 10% 50%, rgba(253, 224, 71, 0.55) 0%, transparent 52%),
+            radial-gradient(ellipse at 90% 10%, rgba(120, 53, 15, 0.55) 0%, transparent 45%),
+            radial-gradient(ellipse at 60% 90%, rgba(180, 83, 9, 0.35) 0%, transparent 40%),
+            linear-gradient(135deg, #F59E0B 0%, #D97706 55%, #92400E 100%)
+          `
+        }}
+      >
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           <div className="absolute top-10 left-10 text-8xl animate-float-y" style={{ animationDelay: '0s', animationDuration: '3.5s' }}>🏷️</div>
           <div className="absolute top-1/3 right-16 text-6xl animate-float-y" style={{ animationDelay: '0.8s', animationDuration: '4s' }}>📦</div>
