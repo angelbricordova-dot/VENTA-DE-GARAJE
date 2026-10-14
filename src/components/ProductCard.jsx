@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { MessageCircle } from 'lucide-react'
 import StatusBadge from './StatusBadge'
@@ -13,16 +14,36 @@ function buildWhatsappLink(phone, product) {
 export default function ProductCard({ product }) {
   const { settings } = useSettings()
   const isSold = product.status === 'sold'
+  const imgRef = useRef(null)
+
+  const tiltImg = (e) => {
+    if (!imgRef.current) return
+    const r = e.currentTarget.getBoundingClientRect()
+    const x = (e.clientX - r.left) / r.width
+    const y = (e.clientY - r.top)  / r.height
+    imgRef.current.style.transform =
+      `perspective(600px) rotateX(${(0.5 - y) * 14}deg) rotateY(${(x - 0.5) * 14}deg) scale(1.06)`
+  }
+  const resetImg = () => {
+    if (imgRef.current) imgRef.current.style.transform = ''
+  }
 
   return (
     <div className={`card group flex flex-col h-full ${isSold ? 'opacity-70' : ''}`}>
       {/* Image */}
-      <Link to={`/producto/${product.id}`} className="block relative overflow-hidden aspect-square bg-gray-100">
+      <Link
+        to={`/producto/${product.id}`}
+        className="block relative overflow-hidden aspect-[4/3] bg-gray-100"
+        onMouseMove={tiltImg}
+        onMouseLeave={resetImg}
+      >
         {product.imageUrl ? (
           <img
+            ref={imgRef}
             src={product.imageUrl}
             alt={product.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover"
+            style={{ transition: 'transform 0.15s ease-out' }}
             loading="lazy"
             onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex' }}
           />
@@ -46,7 +67,7 @@ export default function ProductCard({ product }) {
       </Link>
 
       {/* Content */}
-      <div className="flex flex-col flex-1 p-4 gap-2">
+      <div className="flex flex-col flex-1 p-3 gap-1.5">
         <div className="flex items-start justify-between gap-2">
           <Link
             to={`/producto/${product.id}`}
@@ -75,8 +96,8 @@ export default function ProductCard({ product }) {
           </span>
         )}
 
-        <div className="flex items-baseline gap-2 mt-auto pt-2 flex-wrap">
-          <span className="text-lg font-bold text-gray-900">
+        <div className="flex items-baseline gap-2 mt-auto pt-1.5 flex-wrap">
+          <span className="text-base font-bold text-gray-900">
             ${product.price} <span className="text-xs font-normal text-gray-500">{product.currency}</span>
           </span>
           {product.originalPrice && (
@@ -92,10 +113,10 @@ export default function ProductCard({ product }) {
             href={buildWhatsappLink(settings.whatsapp, product)}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-whatsapp w-full mt-1"
+            className="btn-whatsapp w-full mt-1 text-xs py-2"
             onClick={e => e.stopPropagation()}
           >
-            <MessageCircle size={16} />
+            <MessageCircle size={14} />
             Lo quiero
           </a>
         )}
