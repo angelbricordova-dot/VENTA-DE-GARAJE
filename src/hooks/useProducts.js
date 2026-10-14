@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { PRODUCTS_KEY } from '../config'
 import { seedProducts } from '../data/seedProducts'
 
@@ -13,18 +13,20 @@ function loadFromStorage() {
 function saveToStorage(products) {
   try {
     localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products))
-  } catch {}
+    return { ok: true }
+  } catch (e) {
+    const isQuota = e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014
+    return { ok: false, quota: isQuota }
+  }
 }
 
 export function useProducts() {
   const [products, setProducts] = useState(() => loadFromStorage() || seedProducts)
-
-  const refresh = useCallback(() => {
-    setProducts(loadFromStorage() || seedProducts)
-  }, [])
+  const [storageWarning, setStorageWarning] = useState(false)
 
   const save = useCallback((updated) => {
-    saveToStorage(updated)
+    const result = saveToStorage(updated)
+    setStorageWarning(!result.ok)
     setProducts(updated)
   }, [])
 
@@ -50,5 +52,19 @@ export function useProducts() {
     save(seedProducts)
   }, [save])
 
-  return { products, addProduct, updateProduct, deleteProduct, resetToSeed, refresh }
+  // Frees space by removing embedded images from sold products (keeps data, removes base64)
+  const freeUpSpace = useCallback(() => {
+    const cleaned = products.map(p =>
+      p.status === 'sold'
+        ? { ...p, images: p.images?.map(() => '') ?? [], imageUrl: '' }
+        : p
+    )
+    save(cleaned)
+  }, [products, save])
+
+  const refresh = useCallback(() => {
+    setProducts(loadFromStorage() || seedProducts)
+  }, [])
+
+  return { products, addProduct, updateProduct, deleteProduct, resetToSeed, refresh, storageWarning, freeUpSpace }
 }

@@ -563,7 +563,7 @@ function BundleForm({ initial = emptyBundle, products, onSave, onCancel, title }
 function SettingsPanel({ onClose }) {
   const { settings, saveSettings } = useSettings()
   const { changePassword } = useAdmin()
-  const { products, resetToSeed } = useProducts()
+  const { products, resetToSeed, freeUpSpace } = useProducts()
   const [whatsapp, setWhatsapp] = useState(settings.whatsapp || '')
   const [pwdForm, setPwdForm] = useState({ current: '', next: '', confirm: '' })
   const [pwdMsg, setPwdMsg] = useState('')
@@ -633,6 +633,12 @@ function SettingsPanel({ onClose }) {
                 <Download size={15} /> Exportar productos (JSON)
               </button>
               <button
+                onClick={() => { if (confirm('Esto borrará las imágenes de los artículos vendidos para liberar espacio. ¿Continuar?')) freeUpSpace() }}
+                className="btn-secondary w-full"
+              >
+                🗜️ Liberar espacio (limpiar imgs. vendidos)
+              </button>
+              <button
                 onClick={() => { if (confirm('¿Resetear a los productos de ejemplo? Perderás todos los cambios.')) resetToSeed() }}
                 className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-red-200 text-red-600 text-sm font-medium hover:bg-red-50 transition-colors"
               >
@@ -650,7 +656,7 @@ function SettingsPanel({ onClose }) {
 export default function Admin() {
   const { isAuthenticated, logout } = useAdmin()
   const [authed, setAuthed] = useState(isAuthenticated)
-  const { products, addProduct, updateProduct, deleteProduct } = useProducts()
+  const { products, addProduct, updateProduct, deleteProduct, storageWarning, freeUpSpace } = useProducts()
   const { bundles, addBundle, updateBundle, deleteBundle } = useBundles()
   const [view, setView] = useState('products')
   const [showForm, setShowForm] = useState(false)
@@ -727,6 +733,23 @@ export default function Admin() {
           ))}
         </div>
       </div>
+
+      {/* Storage warning banner */}
+      {storageWarning && (
+        <div className="bg-red-50 border-b border-red-200 px-4 sm:px-6 py-3 flex items-center gap-3">
+          <span className="text-red-500 text-lg shrink-0">⚠️</span>
+          <p className="text-sm text-red-700 flex-1">
+            <strong>Almacenamiento lleno.</strong> Tus últimos cambios no se guardaron — al recargar los perderás.
+            Exporta tus productos o libera espacio eliminando las imágenes de los artículos ya vendidos.
+          </p>
+          <button
+            onClick={() => { freeUpSpace(); alert('Listo — se liberó espacio eliminando imágenes de artículos vendidos.') }}
+            className="shrink-0 text-xs font-semibold bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            Liberar espacio
+          </button>
+        </div>
+      )}
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
 
