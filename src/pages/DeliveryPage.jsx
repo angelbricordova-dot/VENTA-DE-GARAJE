@@ -11,15 +11,15 @@ export default function DeliveryPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Información de Envíos y Entregas</h1>
-        <p className="text-gray-500 mt-1">Todo lo que necesitas saber sobre cómo recibir tu artículo</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">Información de Envíos y Entregas</h1>
+        <p className="text-gray-500 mt-1 dark:text-gray-400">Todo lo que necesitas saber sobre cómo recibir tu artículo</p>
       </div>
 
       <DeliveryInfo />
 
       {/* FAQ */}
       <div className="mt-12">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">Preguntas frecuentes</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">Preguntas frecuentes</h2>
         <div className="space-y-4">
           {[
             {
@@ -43,22 +43,22 @@ export default function DeliveryPage() {
               a: 'Sí. Con un pequeño adelanto (acordado por WhatsApp) puedo apartarlo hasta que coordines la entrega.',
             },
           ].map(faq => (
-            <details key={faq.q} className="bg-white rounded-2xl shadow-card group">
-              <summary className="flex items-center justify-between p-5 cursor-pointer font-semibold text-gray-800 select-none">
+            <details key={faq.q} className="bg-white rounded-2xl shadow-card group dark:bg-gray-800 dark:shadow-none">
+              <summary className="flex items-center justify-between p-5 cursor-pointer font-semibold text-gray-800 select-none dark:text-gray-100">
                 {faq.q}
                 <span className="text-brand-500 group-open:rotate-180 transition-transform duration-200">▼</span>
               </summary>
-              <div className="px-5 pb-5 text-sm text-gray-600 leading-relaxed">{faq.a}</div>
+              <div className="px-5 pb-5 text-sm text-gray-600 leading-relaxed dark:text-gray-400">{faq.a}</div>
             </details>
           ))}
         </div>
       </div>
 
       {/* CTA */}
-      <div className="mt-12 text-center bg-brand-50 rounded-3xl p-8">
+      <div className="mt-12 text-center bg-brand-50 rounded-3xl p-8 dark:bg-brand-900/20">
         <div className="text-4xl mb-3">💬</div>
-        <h3 className="text-xl font-bold text-gray-900 mb-2">¿Tienes más preguntas?</h3>
-        <p className="text-gray-500 mb-6">Escríbeme directamente y te respondo rápido</p>
+        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">¿Tienes más preguntas?</h3>
+        <p className="text-gray-500 dark:text-gray-400 mb-6">Escríbeme directamente y te respondo rápido</p>
         <a
           href={`https://wa.me/${phone.replace(/\D/g, '')}`}
           target="_blank"

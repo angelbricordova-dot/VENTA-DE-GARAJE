@@ -2,28 +2,28 @@ import { SITE_CONFIG } from '../config'
 import { MapPin, Package, Clock } from 'lucide-react'
 
 const colorMap = {
-  emerald: 'bg-emerald-50 text-emerald-800 border-emerald-100',
-  blue:    'bg-blue-50   text-blue-800   border-blue-100',
-  purple:  'bg-purple-50 text-purple-800 border-purple-100',
-  amber:   'bg-amber-50  text-amber-800  border-amber-100',
+  emerald: 'bg-emerald-50 text-emerald-800 border-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-800/30',
+  blue:    'bg-blue-50   text-blue-800   border-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800/30',
+  purple:  'bg-purple-50 text-purple-800 border-purple-100 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-800/30',
+  amber:   'bg-amber-50  text-amber-800  border-amber-100 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800/30',
 }
 
 const iconColorMap = {
-  emerald: 'bg-emerald-100 text-emerald-600',
-  blue:    'bg-blue-100   text-blue-600',
-  purple:  'bg-purple-100 text-purple-600',
-  amber:   'bg-amber-100  text-amber-600',
+  emerald: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-800/40 dark:text-emerald-400',
+  blue:    'bg-blue-100   text-blue-600 dark:bg-blue-800/40 dark:text-blue-400',
+  purple:  'bg-purple-100 text-purple-600 dark:bg-purple-800/40 dark:text-purple-400',
+  amber:   'bg-amber-100  text-amber-600 dark:bg-amber-800/40 dark:text-amber-400',
 }
 
 export default function DeliveryInfo({ compact = false }) {
   return (
-    <section className={compact ? '' : 'py-16 bg-white'}>
+    <section className={compact ? '' : 'py-16 bg-white dark:bg-gray-950'}>
       <div className={compact ? '' : 'max-w-6xl mx-auto px-4 sm:px-6'}>
         {!compact && (
           <div className="text-center mb-10">
-            <span className="inline-block bg-brand-50 text-brand-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-3">📦 Entregas</span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">¿Dónde hacemos entregas?</h2>
-            <p className="text-gray-500 mt-2">Entrega personal en estas ciudades, o envío nacional</p>
+            <span className="inline-block bg-brand-50 text-brand-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-3 dark:bg-brand-900/20 dark:text-brand-400">📦 Entregas</span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">¿Dónde hacemos entregas?</h2>
+            <p className="text-gray-500 mt-2 dark:text-gray-400">Entrega personal en estas ciudades, o envío nacional</p>
           </div>
         )}
 
@@ -46,14 +46,14 @@ export default function DeliveryInfo({ compact = false }) {
         </div>
 
         {!compact && (
-          <div className="mt-6 flex flex-col sm:flex-row gap-3 bg-gray-50 rounded-2xl p-5 text-sm text-gray-600">
+          <div className="mt-6 flex flex-col sm:flex-row gap-3 bg-gray-50 rounded-2xl p-5 text-sm text-gray-600 dark:bg-gray-800 dark:text-gray-400">
             <div className="flex items-start gap-2 flex-1">
               <Package size={16} className="mt-0.5 text-brand-500 shrink-0" />
-              <span><strong className="text-gray-800">Envíos nacionales:</strong> Trabajamos con MRW y Zoom Express con cobro a destino. El costo corre por cuenta del comprador.</span>
+              <span><strong className="text-gray-800 dark:text-gray-200">Envíos nacionales:</strong> Trabajamos con MRW y Zoom Express con cobro a destino. El costo corre por cuenta del comprador.</span>
             </div>
             <div className="flex items-start gap-2 flex-1">
               <Clock size={16} className="mt-0.5 text-brand-500 shrink-0" />
-              <span><strong className="text-gray-800">Coordinar entrega:</strong> Escríbeme por WhatsApp y acordamos el punto de encuentro más conveniente para ambos.</span>
+              <span><strong className="text-gray-800 dark:text-gray-200">Coordinar entrega:</strong> Escríbeme por WhatsApp y acordamos el punto de encuentro más conveniente para ambos.</span>
             </div>
           </div>
         )}
